@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CSAPA Beauvais – Flashcards</title>
+<link href="https://fonts.googleapis.com/css2?family=Lora:wght@400;600&family=IBM+Plex+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'IBM Plex Sans',sans-serif;background:#f0ede6;color:#1c1c1a;min-height:100vh;}
+
+header{
+  background:#E3E4E4;
+  padding:1.75rem 1.25rem 1.5rem;
+  text-align:center;
+  position:relative;
+}
+.header-pills{display:flex;justify-content:center;gap:8px;margin-bottom:0.9rem;flex-wrap:wrap;}
+.pill{background:rgba(159,225,203,0.18);color:#0F6E56;font-size:11px;font-weight:500;letter-spacing:.07em;text-transform:uppercase;padding:4px 12px;border-radius:20px;border:1px solid rgba(15,110,86,0.25);}
+header h1{font-family:'Lora',serif;color:#2d5357;font-size:clamp(1.3rem,5vw,1.9rem);font-weight:600;line-height:1.25;margin-bottom:.45rem;}
+header p{font-size:13.5px;color:#2d5357;max-width:420px;margin:0 auto;line-height:1.6;}
+
+.nav-band{
+  background:#2d3131;
+  padding:.6rem 1rem;
+  display:flex;align-items:center;justify-content:center;gap:1.25rem;
+}
+.nav-band span{color:rgba(255,255,255,.5);font-size:12.5px;}
+.nav-band strong{color:#fff;}
+.nav-btn{
+  background:transparent;border:1px solid rgba(255,255,255,.3);color:#fff;
+  width:32px;height:32px;border-radius:50%;font-size:16px;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;transition:background .15s;
+  flex-shrink:0;
+}
+.nav-btn:hover{background:rgba(255,255,255,.1);}
+.nav-btn:disabled{opacity:.25;cursor:default;}
+
+.progress-bar-wrap{height:3px;background:rgba(0,0,0,.08);}
+.progress-bar{height:3px;background:#0a5240;transition:width .3s ease;}
+
+.stage{
+  padding:1.25rem 1rem 2rem;
+  max-width:520px;
+  margin:0 auto;
+}
+
+.flashcard{
+  background:#fff;
+  border-radius:16px;
+  overflow:hidden;
+  box-shadow:0 2px 12px rgba(0,0,0,.07);
+  animation:fadeUp .3s ease;
+}
+@keyframes fadeUp{from{opacity:0;transform:translateY(10px);}to{opacity:1;transform:translateY(0);}}
+
+.card-image{
+  width:100%;
+  background:#f7f5ef;
+  display:flex;align-items:center;justify-content:center;
+  border-bottom:1px solid #ede9e0;
+  position:relative;
+  overflow:hidden;
+  height:220px;
+}
+.card-image img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  display:block;
+}
+.card-image-placeholder{
+  width:100%;
+  height:100%;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  gap:10px;
+  color:#aaa9a0;
+  font-size:13px;
+}
+.card-image-placeholder svg{
+  width:48px;height:48px;
+  stroke:#ccc9c0;fill:none;stroke-width:1.5;
+}
+.card-num-badge{
+  position:absolute;top:12px;left:14px;
+  background:#073d2e;color:#9FE1CB;
+  font-size:11px;font-weight:500;
+  padding:3px 9px;border-radius:20px;
+  z-index:2;
+}
+
+.card-text{padding:1.4rem 1.4rem 1.6rem;}
+.card-cat{
+  font-size:11px;font-weight:500;text-transform:uppercase;letter-spacing:.08em;
+  color:#0a5240;margin-bottom:.45rem;
+}
+.card-name{
+  font-family:'Lora',serif;font-size:1.2rem;font-weight:600;
+  color:#1c1c1a;line-height:1.3;margin-bottom:.75rem;
+}
+.card-desc{
+  font-size:13.5px;line-height:1.75;color:#3a3a36;margin-bottom:1rem;
+}
+
+.badges{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:1rem;}
+.badge{font-size:11px;font-weight:500;padding:3px 9px;border-radius:20px;}
+.badge.usage{background:#E6F1FB;color:#0C447C;}
+.badge.risk{background:#FEF3CD;color:#7D5A00;}
+.badge.law{background:#E1F5EE;color:#085041;}
+
+.tip{
+  background:#E1F5EE;
+  border-left:3px solid #0a5240;
+  border-radius:0 8px 8px 0;
+  padding:.65rem .9rem;
+  font-size:12.5px;color:#073d2e;line-height:1.65;
+}
+
+.dots{display:flex;justify-content:center;gap:6px;margin-top:1.1rem;}
+.dot{width:7px;height:7px;border-radius:50%;background:#c8c5bc;transition:background .2s,transform .2s;}
+.dot.active{background:#0a5240;transform:scale(1.3);}
+
+footer{
+  background:#2d3131;color:rgba(255,255,255,.6);
+  text-align:center;padding:1.5rem 1rem 1.25rem;font-size:12px;line-height:1.8;
+}
+footer strong{color:#fff;}
+footer a{color:#9FE1CB;text-decoration:none;}
+.footer-logo{
+  display:block;
+  margin:0 auto 1rem;
+  width:64px;
+  height:64px;
+  object-fit:contain;
+}
+.disclaimer{
+  background:#fff8f0;border-top:1px solid #f0e0c0;
+  padding:.8rem 1rem;font-size:12px;color:#7a5500;text-align:center;line-height:1.6;
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-pills">
+    <span class="pill">CSAPA Beauvais</span>
+    <span class="pill">Addictions France</span>
+  </div>
+  <h1>Guide du matériel de réduction des risques.</h1>
+  <p>Parcourez les fiches pour comprendre le rôle de chaque objet.</p>
+  <p><strong> Confidentiel - Gratuit - Sans jugement </strong></p>
+</header>
+
+<div class="progress-bar-wrap"><div class="progress-bar" id="pbar"></div></div>
+
+<div class="nav-band">
+  <button class="nav-btn" id="prev" aria-label="Précédent">&#8592;</button>
+  <span><strong id="cur">1</strong> / <strong>4</strong></span>
+  <button class="nav-btn" id="next" aria-label="Suivant">&#8594;</button>
+</div>
+
+<div class="stage">
+  <div class="flashcard" id="card"></div>
+  <div class="dots" id="dots"></div>
+</div>
+
+<div class="disclaimer">⚠️ Si vous avez des questions supplémentaires, n'hésitez pas à vous rapprocher d'un professionnel du centre.</div>
+
+<footer>
+  <img class="footer-logo" src="logo.png" alt="Logo Addictions France"
+       onerror="this.style.display='none'">
+  <strong>CSAPA de Beauvais – Addictions France</strong><br>
+  Centre de Soins, d'Accompagnement et de Prévention en Addictologie<br>
+  <a href="https://www.addictions-france.org">addictions-france.org</a>
+</footer>
+
+<script>
+const objets = [
+  {
+    num:1, cat:"Outil de prévention", nom:"Éthylotest",
+    img:"img/ethylo.png",
+    desc:"L'éthylotest chimique permet d'estimer son taux d'alcoolémie avant de prendre le volant. Il indique si l'alcoolémie dépasse ou non le seuil légal de 0,25 mg/L d'air expiré.",
+    badges:[{l:"Alcool / conduite",t:"usage"},{l:"Résultat en 3 min",t:"law"}],
+    conseil:"Un résultat négatif ne garantit pas une parfaite sobriété. Le seul résultat officiel est celui du contrôle des forces de l'ordre. En cas de doute, ne conduisez pas.",
+  },
+  {
+    num:2, cat:"Réduction des risques", nom:"Kit Base (pipe à crack)",
+    img:"img/pipe-crack.png",
+    desc:"Le Kit Base® contient les éléments essentiels nécessaires à l'utilisation de la pipe, ainsi que du matériel d'hygiène et de prévention permettant de limiter les blessures, les irritations et les risques de transmission d'infections. Simple d'utilisation et pratique à transporter, il vise à améliorer les conditions d'usage tout en encourageant l'adoption de pratiques plus sécuritaires.",
+    badges:[{l:"Inhalation / crack",t:"usage"},{l:"Brûlures / infections",t:"risk"},],
+    conseil:"Ne pas partager la pipe. Il contient précisément : plusieurs filtres, deux embouts, ainsi qu'une crème pour limiter les lésions cutanées (brûlures, fissures). Disponibilité : Sur demande au près du secrétariat.",
+  },
+  {
+    num:3, cat:"Réduction des risques", nom:"Roule ta paille (+ sérum phy)",
+    img:"img/rouletapaille.png",
+    desc:"La paille à usage unique permet d'inhaler des substances sans partager de matériel. Associée à un sérum physiologique, elle protège les muqueuses nasales et réduit les risques d'infection.",
+    badges:[{l:"Inhalation / sniff",t:"usage"},{l:"VIH / VHC",t:"risk"},{l:"Kit gratuit",t:"law"}],
+    conseil:"Une paille = un usage. Ne jamais partager. Le sérum phy (monodose) nettoie les narines après usage et prévient les irritations et saignements.",
+  },
+  {
+    num:4, cat:"Protection sexuelle", nom:"Préservatifs externe & interne",
+    img:"img/preservatif.png",
+    desc:"Le préservatif externe (masculin) et le préservatif interne (féminin) sont les seuls moyens contraceptifs qui protègent à la fois contre les IST et contre une grossesse non désirée.",
+    badges:[{l:"IST / VIH",t:"risk"},{l:"Contraception",t:"usage"},{l:"Distribué gratuitement",t:"law"}],
+    conseil:"Un préservatif par rapport sexuel. Le préservatif interne peut être posé à l'avance.",
+  }
+];
+
+let current = 0;
+
+function renderDots(){
+  const dots = document.getElementById('dots');
+  dots.innerHTML = objets.map((_,i)=>`<div class="dot${i===current?' active':''}"></div>`).join('');
+}
+
+function imgHTML(o){
+  return `<img src="${o.img}" alt="${o.nom}"
+    onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+  <div class="card-image-placeholder" style="display:none;position:absolute;inset:0;">
+    <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+    <span>Ajouter l'image : <strong>${o.img}</strong></span>
+  </div>`;
+}
+
+function renderCard(){
+  const o = objets[current];
+  const badgesHTML = o.badges.map(b=>`<span class="badge ${b.t}">${b.l}</span>`).join('');
+  document.getElementById('card').innerHTML = `
+    <div class="card-image">
+      <div class="card-num-badge">${o.num} / 4</div>
+      ${imgHTML(o)}
+    </div>
+    <div class="card-text">
+      <div class="card-cat">${o.cat}</div>
+      <div class="card-name">${o.nom}</div>
+      <p class="card-desc">${o.desc}</p>
+      <div class="badges">${badgesHTML}</div>
+      <div class="tip">${o.conseil}</div>
+    </div>
+  `;
+  document.getElementById('cur').textContent = current+1;
+  document.getElementById('pbar').style.width = ((current+1)/objets.length*100)+'%';
+  document.getElementById('prev').disabled = current === 0;
+  document.getElementById('next').disabled = current === objets.length-1;
+  renderDots();
+
+  const card = document.getElementById('card');
+  let startX=0;
+  card.addEventListener('touchstart',e=>{startX=e.touches[0].clientX;},{passive:true});
+  card.addEventListener('touchend',e=>{
+    const dx=e.changedTouches[0].clientX-startX;
+    if(dx<-50&&current<objets.length-1){current++;renderCard();}
+    else if(dx>50&&current>0){current--;renderCard();}
+  },{passive:true});
+}
+
+document.getElementById('prev').addEventListener('click',()=>{if(current>0){current--;renderCard();}});
+document.getElementById('next').addEventListener('click',()=>{if(current<objets.length-1){current++;renderCard();}});
+
+renderCard();
+</script>
+</body>
+</html>
